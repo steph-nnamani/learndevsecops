@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore 
+.git
+.aws 
+.bashrc
+.bash_logout 
+.bash_history 
+.ssh
+.viminfo 
