@@ -1,41 +1,63 @@
-
-<html><body><h1 style="font-size:50px;color:blue;">WEZVA TECHNOLOGIES (ADAM) | <font style="color:red;"> www.wezva.com | <font style="color:green;"> +91-9739110917 </h1>
-<h1> Subscribe to our youtube channel: 
-<a href="https://www.youtube.com/c/DevOpsLearnEasy">https://www.youtube.com/c/DevOpsLearnEasy</a> </h1>
-</body></html>
-
-
 # PRODUCTION GRADE DEVSECOPS CICD Pipeline
 
-## Prereq: Create 2 EC2 servers
-- [ ] Build server with 15GB storage - t2.mirco
-- [ ] Sonarqube server with 4 GB memory - t2.medium
 
-## Step 1: Ensure all the necessary plugins are installed in Jenkins Master
-- [ ] Parameterized trigger plugin
-- [ ] Gitlab plugin
-- [ ] Docker Pipeline
-- [ ] Pipeline: AWS steps
-- [ ] SonarQube Scanner
-- [ ] Quality Gates
+## Prereq: Create 3 EC2 servers
+- [ ] Build server with 10 GB storage - t2.medium
+- [ ] Sonarqube server with 10 GB memory - t2.medium
+- [ ] Jenkins server with 8 GB storage - t2.medium
 
-## Step 2: Install Docker, Java8, Java11 & Trivy on Build Server
-```
+## - t2.micro Build server   - Serves as Jenkins slave
+- Install Docker, Java8, Java11 & Trivy on Build Server by running setup.sh script.
+Why do we need both Java8 and Java11?
+    Java8: Needed by our springboot application
+    Java11: Needed for Jenkins master to connect to slave machine
+Docker needed so we can generate our image
+Trivy needed for image scanning
+
+How to use multiple java versions in one machine:
+java --version  # references the highest version
+which java => /usr/bin/java
+ls -l /usr/bin/java
+ls -l /etc/alternatives/java
+ls /usr/lib/jvm/
+ls /usr/lib/jvm/
+
+
+'''
+$ sudo chmod +x setup.sh
 $ sudo ./setup.sh
-```
+'''
 
-## Step 3: Install Sonrqube on the t2.medium server
-```
+## - t2.medium
+- Install Sonarqube on the t2.medium server
+
 $ sudo apt update
 $ sudo apt install -y docker.io
 $ sudo usermod -a -G docker ubuntu
 $ sudo docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
-```
 
-## Step 4: Add necessary credentials
+free -m
+df -kh .
+
+
+## Jenkins Server (CI) - Master
+- You can install Jenkins on ec2 instance or as a servlet (container)
+# Ensure all the necessary plugins are installed in Jenkins Master
+- [ ] Git plugin, JDK plugin
+- [ ] Ansible plugin (Not used)
+- [ ] Parameterized trigger plugin
+- [ ] Gitlab plugin/Github plugin
+- [ ] Artifactory plugin (Not used)
+- [ ] Docker Pipeline       / ECR/Dockerhub/ghcr.io
+- [ ] Pipeline: AWS steps
+- [ ] SonarQube Scanner
+- [ ] Quality Gates
+
+
+## Add necessary credentials
 - [ ] Generate Sonarqube token of type "global analysis token" and add it as Jenkins credential of type "secret text"
 - [ ] Add dockerhub credentials as username/password type
-- [ ] Add Gitlab credentials 
+- [ ] Add Gitlab credentials (If using Gitlab) - Github is okay too
 - [ ] Add Build server credentials for Jenkins master to connect
 
 ## Step 5: Enable Sonarqube webhook for Quality Gates & Install dependency-check plugin

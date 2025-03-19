@@ -1,9 +1,3 @@
-<html><body><h1 style="font-size:50px;color:blue;">WEZVA TECHNOLOGIES (ADAM) | <font style="color:red;"> www.cloudtechengine.com | <font style="color:green;"> + 1 312x xxx xxx </h1>
-<h1> Subscribe to our youtube channel: 
-<a href="https://www.youtube.com/c/DevOpsLearnEasy">https://www.youtube.com/c/DevOpsLearnEasy</a> </h1>
-</body></html>
-
-
 # PRODUCTION GRADE DEVSECOPS CICD Pipeline
 
 ## Create 1 EC2 server
