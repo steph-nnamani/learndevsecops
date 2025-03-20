@@ -17,7 +17,6 @@ pipeline {
       steps {
         echo "Building Jar Component ..."
         sh '''
-          cd learndevsecops/devsecops/springboot-build-pipeline
           export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
           mvn clean package
         '''
@@ -28,7 +27,6 @@ pipeline {
       steps {
         echo "Running Code Coverage ..."
         sh '''
-          cd learndevsecops/devsecops/springboot-build-pipeline
           export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
           mvn jacoco:report
         '''
@@ -39,7 +37,6 @@ pipeline {
       steps {
         echo "Running Software Composition Analysis using OWASP Dependency-Check ..."
         sh '''
-          cd learndevsecops/devsecops/springboot-build-pipeline
           export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
           mvn org.owasp:dependency-check-maven:check
         '''
@@ -51,7 +48,6 @@ pipeline {
         echo "Running Static Application Security Testing using SonarQube Scanner ..."
         withSonarQubeEnv('mysonarqube') {
           sh '''
-            cd learndevsecops/devsecops/springboot-build-pipeline
             mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
                             -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
                             -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
@@ -100,12 +96,12 @@ pipeline {
         sh '''
           docker run -d --name smokerun -p 8080:8080 $registry
           sleep 90
-          cd devsecops/springboot-build-pipeline
           ./check.sh
           docker rm --force smokerun
         '''
       }
     }
-  } 
-}    
+  }
+}
+    
     
