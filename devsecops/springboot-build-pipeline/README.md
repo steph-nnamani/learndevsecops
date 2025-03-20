@@ -7,7 +7,9 @@
 - [ ] Jenkins server with 8 GB storage - t2.medium
 
 ## - t2.micro Build server   - Serves as Jenkins slave
-- Install Docker, Java8, Java11 & Trivy on Build Server by running setup.sh script.
+- Install Docker, Java8, Java11 & Trivy on Build 
+Server by running setup.sh script.
+
 Why do we need both Java8 and Java11?
     Java8: Needed by our springboot application
     Java11: Needed for Jenkins master to connect to slave machine
@@ -31,10 +33,15 @@ $ sudo ./setup.sh
 ## - t2.medium
 - Install Sonarqube on the t2.medium server
 
-$ sudo apt update
-$ sudo apt install -y docker.io
-$ sudo usermod -a -G docker ubuntu
-$ sudo docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+#!/bin/bash
+sudo apt update -y
+sudo apt install openjdk-17-jdk -y
+sudo apt install -y docker.io
+sudo usermod -a -G docker ubuntu
+echo "docker user added to ubuntu user group"
+sudo apt update & upgrade -y
+sudo docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+echo "sonarqube installed successfully"
 
 free -m
 df -kh .
@@ -58,7 +65,7 @@ df -kh .
 - [ ] Generate Sonarqube token of type "global analysis token" and add it as Jenkins credential of type "secret text"
 - [ ] Add dockerhub credentials as username/password type
 - [ ] Add Gitlab credentials (If using Gitlab) - Github is okay too
-- [ ] Add Build server credentials for Jenkins master to connect
+- [ ] Add Build server credentials for Jenkins master to connect.
 
 ## Step 5: Enable Sonarqube webhook for Quality Gates & Install dependency-check plugin
 - [ ] Generate webhook & add the Jenkins URL as follows - http://URL:8080/sonarqube-webhook/
