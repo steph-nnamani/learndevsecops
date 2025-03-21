@@ -19,6 +19,7 @@ pipeline {
       steps {
           script {
               // Build the Maven project and create the JAR file
+              cd devsecops/springboot-build-pipeline
               sh 'mvn clean package'
               // Capture the generated JAR file dynamically
               def jarFile = sh(script: "echo target/*.jar", returnStdout: true).trim()
@@ -85,6 +86,7 @@ pipeline {
     stage('Stage VI: Build Image') {
       steps {
           echo "Building Docker Image"
+          cd devsecops/springboot-build-pipeline
           script {
               docker.withRegistry('', registryCredential) { 
                   
