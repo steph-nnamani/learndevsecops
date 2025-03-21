@@ -2,8 +2,8 @@ pipeline {
   agent { label 'build' }
 
   environment { 
-    registry = "ghcr.io/steph-nnamani/springboot-build-pipeline"
-    registryCredential = 'ghcr'  // This is the Jenkins credential ID storing your GitHub PAT
+    registry = "zaralink/democicd"
+    registryCredential = 'dockerhub'  // This is the Jenkins credential ID storing your GitHub PAT
   }
 
   stages {
@@ -79,8 +79,8 @@ pipeline {
       steps {
           echo "Building Docker Image"
           script {
-              docker.withRegistry('https://ghcr.io', registryCredential) { 
-                  def myImage = docker.build("ghcr.io/steph-nnamani/springboot-build-pipeline:latest")
+              docker.withRegistry('', registryCredential) { 
+                  def myImage = docker.build registry
                   myImage.push()
                }
            }
