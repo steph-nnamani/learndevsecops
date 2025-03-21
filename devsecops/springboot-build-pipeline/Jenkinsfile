@@ -80,7 +80,7 @@ pipeline {
         echo "Building Docker Image"
         script {
           docker.withRegistry('', registryCredential) { 
-            def myImage = docker.build(registry, "steph-nnamani/springboot-build-pipeline")
+            def myImage = docker.build(registry, "ghcr.io/steph-nnamani/springboot-build-pipeline")
             myImage.push()
           }
         }
