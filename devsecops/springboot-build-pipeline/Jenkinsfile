@@ -4,6 +4,8 @@ pipeline {
   environment { 
     registry = "zaralink/democicd"
     registryCredential = 'dockerhub'  // This is the Jenkins credential ID storing your GitHub PAT
+    JAVA_HOME = "/usr/lib/jvm/java-8-openjdk-amd64"
+    JAR_FILE = "target/*.jar"  // This will dynamically capture the JAR file
   }
 
   stages {
@@ -13,16 +15,21 @@ pipeline {
       }
     }
 
-    stage('Stage I: Build') {
+    stage('Build') {
       steps {
-        echo "Building Jar Component ..."
-        sh '''
-          cd devsecops/springboot-build-pipeline
-          export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-          mvn clean package
-        '''
-      }
+          script {
+              // Build the Maven project and create the JAR file
+              sh 'mvn clean package'
+              // Capture the generated JAR file dynamically
+              def jarFile = sh(script: "echo target/*.jar", returnStdout: true).trim()
+              // Set the JAR file path to environment variable
+              env.JAR_FILE = jarFile
+          }
+       }
     }
+    
+    
+   
 
     stage('Stage II: Code Coverage') {
       steps {
@@ -80,8 +87,13 @@ pipeline {
           echo "Building Docker Image"
           script {
               docker.withRegistry('', registryCredential) { 
-                  def myImage = docker.build("${registry}", "-f devsecops/springboot-build-pipeline/Dockerfile .")
-                  myImage.push()
+                  
+                  def myImage = docker.build(
+                      "${registry}", 
+                      "--build-arg JAR_FILE=${env.JAR_FILE} " +
+                      "-f devsecops/springboot-build-pipeline/Dockerfile ."
+                  )
+
                }
            }
        }
